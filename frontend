@@ -1,0 +1,42 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+function App() {
+    const [input, setInput] = useState('');
+    const [response, setResponse] = useState(null);
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post('http://localhost:5000/bfhl', JSON.parse(input));
+            setResponse(res.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    return (
+        <div>
+            <h1>Your Roll Number</h1>
+            <form onSubmit={handleSubmit}>
+                <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder='Enter JSON here...'
+                    rows={5}
+                    style={{ width: '100%' }}
+                />
+                <button type='submit'>Submit</button>
+            </form>
+            {response && (
+                <div>
+                    <h2>Response</h2>
+                    <pre>{JSON.stringify(response, null, 2)}</pre>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default App;
+
